@@ -16,7 +16,7 @@ import { createCanvas, getClickCoordinates } from "./canvas";
 
     notesStore.addNote(createNote({ x, y }));
   };
-
+  console.log("hi");
   document.addEventListener(STORE_ADD, function () {
     drawer.draw();
   });

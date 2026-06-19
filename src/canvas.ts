@@ -1,6 +1,9 @@
 export function createCanvas() {
   const canvas = document.createElement("canvas");
+
   canvas.setAttribute("id", "sticky-notes");
+
+  document.getElementsByTagName("body")[0].append(canvas);
 
   return canvas;
 }
