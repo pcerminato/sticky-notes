@@ -1,3 +1,10 @@
 body {
   margin: 0;
 }
+
+canvas#sticky-notes {
+  width: 100vw;
+  height: 100vh;
+  image-rendering: pixelated;
+  background-color: rgb(248, 234, 217);
+}
