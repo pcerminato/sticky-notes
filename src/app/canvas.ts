@@ -51,25 +51,22 @@ export function createCanvasMouseDownHandler(
         )
       ) {
         notesStore.saveState({
-          selected: {
+          action: {
+            type: "resizing",
             note,
-            // The current position (starting position at the right-bottom edge of the note)
-            x: note.width,
-            y: note.height,
-          },
-          isResizing: true, // <-
-          initCursor: {
-            x: cursor.x,
-            y: cursor.y,
+            startWidth: note.width,
+            startHeight: note.height,
+            initCursor: {
+              x: cursor.x,
+              y: cursor.y,
+            },
           },
         });
 
         /* !!! Moves the note being resized to the front */
         notesStore.notes.splice(i, 1);
         notesStore.notes.push(note);
-
         noteClicked = true;
-
         break;
       }
 
@@ -79,42 +76,43 @@ export function createCanvasMouseDownHandler(
       */
       if (clickIsOverArea(cursor, note)) {
         notesStore.saveState({
-          selected: {
+          action: {
+            type: "dragging",
             note,
-            x: cursor.x - note.x,
-            y: cursor.y - note.y,
+            cursorOffset: {
+              x: cursor.x - note.x,
+              y: cursor.y - note.y,
+            },
           },
-          isResizing: false,
-          initCursor: undefined,
         });
 
         /* !!! To have the selected note up front, puts it at the end of the list, so it is rendered last */
         notesStore.notes.splice(i, 1);
         notesStore.notes.push(note);
-
         noteClicked = true;
-
         break;
       }
     }
 
     /* 
       Case when the click is over the canvas.
-      Creates the note on by the coordinates of the click.
+      Creates the note by the coordinates of the click.
     */
     if (!noteClicked) {
       const note = createNote({ x: cursor.x, y: cursor.y });
 
       notesStore.addNote(note);
 
+      /* TEST: set as dragging right after creation to enable dragging the note on the same mousedown */
       notesStore.saveState({
-        selected: {
+        action: {
+          type: "dragging",
           note,
-          x: cursor.x - note.x,
-          y: cursor.y - note.y,
+          cursorOffset: {
+            x: cursor.x - note.x,
+            y: cursor.y - note.y,
+          },
         },
-        isResizing: false,
-        initCursor: undefined,
       });
     }
 
@@ -133,41 +131,25 @@ export function createCanvasMouseMoveHandler(
   drawer: IDrawer,
 ) {
   return function canvasMouseMoveHandler(e: MouseEvent) {
-    if (!notesStore.state.selected) {
+    const { action } = notesStore.state;
+
+    if (action.type === "none") {
       return;
     }
 
     const cursor = getClickCoordinates(canvas, e);
-    const { note, x: startX, y: startY } = notesStore.state.selected;
 
-    if (notesStore.state.isResizing && notesStore.state?.initCursor) {
+    if (action.type === "resizing") {
+      const { note, startWidth, startHeight, initCursor } = action;
       // ranges of how much the cursor moved to the new position from the initial mousedown.
-      const rangeX = cursor.x - notesStore.state.initCursor.x;
-      const rangeY = cursor.y - notesStore.state.initCursor.y;
+      const rangeX = cursor.x - initCursor.x;
+      const rangeY = cursor.y - initCursor.y;
 
-      note.width = Math.max(50, startX + rangeX);
-      note.height = Math.max(50, startY + rangeY);
-
-      notesStore.saveState({
-        selected: {
-          note,
-          x: startX,
-          y: startY,
-        },
-      });
-    } else {
-      note.x = cursor.x - startX;
-      note.y = cursor.y - startY;
-
-      notesStore.saveState({
-        selected: {
-          note,
-          x: cursor.x - note.x /* TODO: here there might be a bug! */,
-          y: cursor.y - note.y,
-        },
-        isResizing: false,
-        initCursor: undefined,
-      });
+      note.width = Math.max(50, startWidth + rangeX);
+      note.height = Math.max(50, startHeight + rangeY);
+    } else if (action.type === "dragging") {
+      action.note.x = cursor.x - action.cursorOffset.x;
+      action.note.y = cursor.y - action.cursorOffset.y;
     }
 
     drawer.drawAll();
@@ -179,11 +161,7 @@ export function createCanvasMouseUpHandler(
   drawer: IDrawer,
 ) {
   return function canvasMouseUpHandler() {
-    notesStore.saveState({
-      selected: undefined,
-      isResizing: false,
-      initCursor: undefined,
-    });
+    notesStore.saveState({ action: { type: "none" } });
     drawer.drawAll();
   };
 }

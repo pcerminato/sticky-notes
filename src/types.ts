@@ -13,18 +13,32 @@ export interface IDrawer {
   drawAll: () => void;
 }
 
+type Coordinates = {
+  x: number;
+  y: number;
+};
+
+type DragAction = {
+  type: "dragging";
+  note: Note;
+  /* the point in the note where the cursor clicks  */
+  cursorOffset: Coordinates;
+};
+
+type ResizeAction = {
+  type: "resizing";
+  note: Note;
+  startWidth: number;
+  startHeight: number;
+  initCursor: Coordinates;
+};
+
+type NoneAction = {
+  type: "none";
+};
+
 export type State = {
-  selected?: {
-    note: Note;
-    x: number;
-    y: number;
-  };
-  isResizing?: boolean;
-  /* keeps the initial cursor point before start resizing */
-  initCursor?: {
-    x: number;
-    y: number;
-  };
+  action: DragAction | ResizeAction | NoneAction;
 };
 
 export type Config = {
@@ -35,20 +49,20 @@ export type Config = {
   resizeHandleSize: number;
 };
 
-export type Note = {
-  x: number;
-  y: number;
-  color: string;
-  content?: string;
-  width: number;
-  height: number;
-};
-
 export type CreateNote = typeof createNote;
 
 export type RectShape = {
   x: number;
   y: number;
+  width: number;
+  height: number;
+};
+
+export type Note = {
+  x: number;
+  y: number;
+  color: string;
+  content?: string;
   width: number;
   height: number;
 };

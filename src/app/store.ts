@@ -17,7 +17,9 @@ The store manages the global state.
 */
 export function createStore(initialNotes?: Note[]): IStore {
   const notes = initialNotes || [];
-  const state: State = {};
+  let _state: State = {
+    action: { type: "none" },
+  };
   const config: Config = {
     resizeHandleSize: RESIZE_HANDLE_SIZE,
     defaultWidth: NOTE_WIDTH,
@@ -31,19 +33,17 @@ export function createStore(initialNotes?: Note[]): IStore {
   }
 
   function saveState(newState: State) {
-    /* The conditional are to allow granular state updates */
-    if ("selected" in newState) {
-      state.selected = newState.selected;
-    }
-
-    if ("isResizing" in newState) {
-      state.isResizing = newState.isResizing;
-    }
-
-    if ("initCursor" in newState) {
-      state.initCursor = newState.initCursor;
-    }
+    _state = newState;
   }
 
-  return Object.freeze({ addNote, notes, state, saveState, config });
+  return Object.freeze({
+    addNote,
+    saveState,
+    notes,
+    config,
+    /* using a getter to prevent direct mutations of the state (only allowed through saveState()) */
+    get state() {
+      return _state;
+    },
+  });
 }

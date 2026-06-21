@@ -16,14 +16,18 @@ export function createDrawer(
 
       drawResizeHandle(note);
 
-      if (store.state.selected && store.state.selected?.note === note) {
+      const { action } = store.state;
+      const isSelected =
+        (action.type === "dragging" || action.type === "resizing") &&
+        action.note === note;
+
+      if (isSelected) {
         /* Heighlight the note if it is mark as selected */
-        const { x, y, width, height } = store.state.selected.note;
         const { defaultBorderColor } = store.config;
 
         context.strokeStyle = defaultBorderColor;
         context.lineWidth = 1;
-        context.strokeRect(x, y, width, height);
+        context.strokeRect(note.x, note.y, note.width, note.height);
       }
     }
   }
