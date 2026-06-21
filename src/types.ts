@@ -5,6 +5,7 @@ export interface IStore {
   notes: Note[];
   state: State;
   saveState: (state: State) => void;
+  readonly config: Config;
 }
 
 export interface IDrawer {
@@ -18,6 +19,20 @@ export type State = {
     x: number;
     y: number;
   };
+  isResizing?: boolean;
+  /* keeps the initial cursor point before start resizing */
+  initCursor?: {
+    x: number;
+    y: number;
+  };
+};
+
+export type Config = {
+  defaultWidth: number;
+  defaultHeight: number;
+  defaultColor: string;
+  defaultBorderColor: string;
+  resizeHandleSize: number;
 };
 
 export type Note = {
@@ -30,3 +45,10 @@ export type Note = {
 };
 
 export type CreateNote = typeof createNote;
+
+export type RectShape = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
