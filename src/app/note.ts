@@ -1,11 +1,4 @@
-export type Note = {
-  x: number;
-  y: number;
-  color: string;
-  content?: string;
-  width: number;
-  height: number;
-};
+import type { Note } from "../types";
 
 export function createNote(note?: Partial<Note>): Note {
   return {

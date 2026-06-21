@@ -1,23 +1,33 @@
 import "./style.css";
-import { createDrawer } from "./drawer";
-import { createEvents, STORE_ADD } from "./events";
-import { createNote } from "./note";
-import { createStore } from "./store";
-import { createCanvas, getClickCoordinates } from "./canvas";
+import { createDrawer } from "./app/drawer";
+import { createNote } from "./app/note";
+import { createStore } from "./app/store";
+import {
+  createCanvas,
+  resizeCanvas,
+  createCanvasMouseDownHandler,
+  createCanvasMouseMoveHandler,
+  createCanvasMouseUpHandler,
+} from "./app/canvas";
 
 (function startApp() {
   const canvas = createCanvas();
-  const eventsHub = createEvents();
-  const notesStore = createStore(eventsHub);
+  const notesStore = createStore();
   const drawer = createDrawer(notesStore, canvas);
 
-  canvas.onclick = function onCanvasClick(e) {
-    const { x, y } = getClickCoordinates(canvas, e);
+  canvas.addEventListener(
+    "mousedown",
+    createCanvasMouseDownHandler(canvas, notesStore, drawer, createNote),
+  );
+  canvas.addEventListener(
+    "mousemove",
+    createCanvasMouseMoveHandler(canvas, notesStore, drawer),
+  );
+  window.addEventListener(
+    "mouseup",
+    createCanvasMouseUpHandler(notesStore, drawer),
+  );
+  window.addEventListener("resize", () => resizeCanvas(canvas, drawer));
 
-    notesStore.addNote(createNote({ x, y }));
-  };
-  console.log("hi");
-  document.addEventListener(STORE_ADD, function () {
-    drawer.draw();
-  });
+  resizeCanvas(canvas, drawer);
 })();
