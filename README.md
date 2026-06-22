@@ -36,9 +36,18 @@ _Note selection_: by clicking over a note is it marked as selected (visually it 
 - Moving a note to the front by selecting it (in case it has other notes overlaping it).
 - Different note colors (a random color is set on note creation).
 
-## Demo
+## Demos
 
-https://github.com/user-attachments/assets/0c8ae071-0300-4bb2-a13c-566acda5811c
+### Main features
+
+<video width="640" height="360" controls>
+  <source src="https://github.com/user-attachments/assets/0c8ae071-0300-4bb2-a13c-566acda5811c" type="video/mp4">
+  Demo video of sticky notes features
+</video>
+
+### Local storage
+
+> video here.
 
 ## Approach
 
@@ -52,7 +61,7 @@ https://github.com/user-attachments/assets/0c8ae071-0300-4bb2-a13c-566acda5811c
   - Dependency injection and inversion of control,
     - for composing the building blocks
     - and to have cleans API definition.
-    - (mostly) pure function for standalone components and single responsibility (easier to test and debug).
+    - (mostly) pure function for standalone components and single responsibility (easier to test and debug or to add feature flags).
   - Event driven communication between components.
   - A centralized store to keep application state seamless and clean.
 

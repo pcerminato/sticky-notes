@@ -1,4 +1,4 @@
-import type { CreateNote, IDrawer, IStore } from "../types";
+import type { CreateNote, IDrawer, IEvents, IStore } from "../types";
 import {
   clickIsOverArea,
   clickIsOverResizeHandle,
@@ -168,6 +168,7 @@ export function createCanvasMouseUpHandler(
   canvas: HTMLCanvasElement,
   notesStore: IStore,
   drawer: IDrawer,
+  eventsHub?: IEvents,
 ) {
   return function canvasMouseUpHandler() {
     const { action } = notesStore.state;
@@ -187,5 +188,7 @@ export function createCanvasMouseUpHandler(
 
     notesStore.saveState({ action: { type: "none" } });
     drawer.drawAll();
+
+    eventsHub?.dispatchNotesChange([...notesStore.notes]);
   };
 }

@@ -68,3 +68,7 @@ export type Note = {
   width: number;
   height: number;
 };
+
+export interface IEvents {
+  dispatchNotesChange: (notes: Note[]) => void;
+}
