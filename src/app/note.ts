@@ -1,12 +1,15 @@
 import type { Note } from "../types";
+import { COLORS, NOTE_WIDTH, NOTE_HEIGHT } from "./constants";
 
 export function createNote(note?: Partial<Note>): Note {
+  const randomColorIndex = Math.floor(Math.random() * COLORS.length);
+
   return {
-    x: note?.x || 200,
-    y: note?.y || 200,
-    color: note?.color || "#FFF",
+    x: note?.x || 0,
+    y: note?.y || 0,
+    color: note?.color || COLORS[randomColorIndex],
     content: note?.content || "",
-    width: note?.width || 200,
-    height: note?.height || 200,
+    width: note?.width || NOTE_WIDTH,
+    height: note?.height || NOTE_HEIGHT,
   };
 }

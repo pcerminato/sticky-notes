@@ -45,7 +45,7 @@ export type State = {
 export type Config = {
   defaultWidth: number;
   defaultHeight: number;
-  defaultColor: string;
+  colors: string[];
   defaultBorderColor: string;
   resizeHandleSize: number;
   deleteZoneSize: number;

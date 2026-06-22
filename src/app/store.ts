@@ -3,9 +3,9 @@ import {
   RESIZE_HANDLE_SIZE,
   NOTE_WIDTH,
   NOTE_HEIGHT,
-  NOTE_COLOR,
   BORDER_COLOR,
   DELETE_ZONE_SIZE,
+  COLORS,
 } from "./constants";
 
 /* 
@@ -22,10 +22,10 @@ export function createStore(initialNotes?: Note[]): IStore {
     action: { type: "none" },
   };
   const config: Config = {
+    colors: COLORS,
     resizeHandleSize: RESIZE_HANDLE_SIZE,
     defaultWidth: NOTE_WIDTH,
     defaultHeight: NOTE_HEIGHT,
-    defaultColor: NOTE_COLOR,
     defaultBorderColor: BORDER_COLOR,
     deleteZoneSize: DELETE_ZONE_SIZE,
   };
