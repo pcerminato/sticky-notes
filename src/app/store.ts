@@ -5,6 +5,7 @@ import {
   NOTE_HEIGHT,
   NOTE_COLOR,
   BORDER_COLOR,
+  DELETE_ZONE_SIZE,
 } from "./constants";
 
 /* 
@@ -16,7 +17,7 @@ The store manages the global state.
   Also helps config overrides and testing).
 */
 export function createStore(initialNotes?: Note[]): IStore {
-  const notes = initialNotes || [];
+  let notes = initialNotes || [];
   let _state: State = {
     action: { type: "none" },
   };
@@ -26,10 +27,18 @@ export function createStore(initialNotes?: Note[]): IStore {
     defaultHeight: NOTE_HEIGHT,
     defaultColor: NOTE_COLOR,
     defaultBorderColor: BORDER_COLOR,
+    deleteZoneSize: DELETE_ZONE_SIZE,
   };
 
   function addNote(note: Note) {
     notes.push(note);
+  }
+
+  function deleteNote(note: Note) {
+    const i = notes.indexOf(note);
+    if (i > -1) {
+      notes.splice(i, 1);
+    }
   }
 
   function saveState(newState: State) {
@@ -38,6 +47,7 @@ export function createStore(initialNotes?: Note[]): IStore {
 
   return Object.freeze({
     addNote,
+    deleteNote,
     saveState,
     notes,
     config,

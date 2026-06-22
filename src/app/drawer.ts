@@ -40,6 +40,8 @@ export function createDrawer(
     store.notes.forEach((n) => {
       draw(n);
     });
+
+    drawDeleteZone();
   }
 
   /* Helper function to draw the zone over the note to enable resize functionality */
@@ -54,6 +56,21 @@ export function createDrawer(
         resizeHandleSize,
         resizeHandleSize,
       );
+    }
+  }
+
+  function drawDeleteZone() {
+    if (context) {
+      const { action } = store.state;
+
+      if (action.type === "dragging") {
+        const { deleteZoneSize } = store.config;
+        const zoneX = canvas.width - deleteZoneSize;
+        const zoneY = canvas.height - deleteZoneSize;
+
+        context.fillStyle = "rgba(216, 20, 59, .5)";
+        context.fillRect(zoneX, zoneY, deleteZoneSize, deleteZoneSize);
+      }
     }
   }
 

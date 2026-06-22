@@ -1,4 +1,4 @@
-import type { Note, RectShape } from "../../types";
+import type { Coordinates, Note, RectShape } from "../../types";
 
 /* 
 This files holds utility functions to work with cursor/mouse events
@@ -22,10 +22,7 @@ export function getClickCoordinates(canvas: HTMLCanvasElement, e: MouseEvent) {
 }
 
 /* Returns true when the cursor click happens over the area of the Rect */
-export function clickIsOverArea(
-  cursor: { x: number; y: number },
-  rect: RectShape,
-) {
+export function clickIsOverArea(cursor: Coordinates, rect: RectShape) {
   return (
     cursor.x >= rect.x &&
     cursor.x <= rect.x + rect.width &&
@@ -36,7 +33,7 @@ export function clickIsOverArea(
 
 /* Returns true when the cursor click happens over the area of the resize handle */
 export function clickIsOverResizeHandle(
-  cursor: { x: number; y: number },
+  cursor: Coordinates,
   note: Note,
   resizeHandleSize: number,
 ) {
@@ -49,4 +46,15 @@ export function clickIsOverResizeHandle(
   };
 
   return clickIsOverArea(cursor, resizeHandleRect);
+}
+
+export function isOverDeleteZone(
+  cursor: Coordinates,
+  canvas: HTMLCanvasElement,
+  deleteZoneSize: number,
+) {
+  const deleteZoneX = canvas.width - deleteZoneSize;
+  const deleteZoneY = canvas.height - deleteZoneSize;
+
+  return cursor.x >= deleteZoneX && cursor.y >= deleteZoneY;
 }

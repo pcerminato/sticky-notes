@@ -25,7 +25,7 @@ import {
   );
   window.addEventListener(
     "mouseup",
-    createCanvasMouseUpHandler(notesStore, drawer),
+    createCanvasMouseUpHandler(canvas, notesStore, drawer),
   );
   window.addEventListener("resize", () => resizeCanvas(canvas, drawer));
 

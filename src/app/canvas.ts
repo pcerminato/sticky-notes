@@ -3,6 +3,7 @@ import {
   clickIsOverArea,
   clickIsOverResizeHandle,
   getClickCoordinates,
+  isOverDeleteZone,
 } from "./utils/cursor";
 
 export function createCanvas() {
@@ -102,9 +103,18 @@ export function createCanvasMouseDownHandler(
       const note = createNote({ x: cursor.x, y: cursor.y });
 
       notesStore.addNote(note);
-
-      /* TEST: set as dragging right after creation to enable dragging the note on the same mousedown */
       notesStore.saveState({
+        action: {
+          type: "none",
+        },
+      });
+      /* Alternative: 
+        setting the state as "dragging" right after the creation of the new note
+        would enable dragging the note on the same mousedown stroke as for creating 
+        (no need to click the canvas to create and then click the note to select it).
+        That would save one render roundtrip.
+      */
+      /* notesStore.saveState({
         action: {
           type: "dragging",
           note,
@@ -113,10 +123,8 @@ export function createCanvasMouseDownHandler(
             y: cursor.y - note.y,
           },
         },
-      });
+      }); */
     }
-
-    // Finally renders the new state.
     drawer.drawAll();
   };
 }
@@ -157,10 +165,26 @@ export function createCanvasMouseMoveHandler(
 }
 
 export function createCanvasMouseUpHandler(
+  canvas: HTMLCanvasElement,
   notesStore: IStore,
   drawer: IDrawer,
 ) {
   return function canvasMouseUpHandler() {
+    const { action } = notesStore.state;
+
+    if (action.type === "dragging") {
+      const { note } = action;
+      const noteIsInDeleteZone = isOverDeleteZone(
+        { x: note.x, y: note.y },
+        canvas,
+        notesStore.config.deleteZoneSize,
+      );
+
+      if (noteIsInDeleteZone) {
+        notesStore.deleteNote(note);
+      }
+    }
+
     notesStore.saveState({ action: { type: "none" } });
     drawer.drawAll();
   };

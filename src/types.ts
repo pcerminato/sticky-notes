@@ -2,6 +2,7 @@ import { createNote } from "./app/note";
 
 export interface IStore {
   addNote: (note: Note) => void;
+  deleteNote: (note: Note) => void;
   notes: Note[];
   state: State;
   saveState: (state: State) => void;
@@ -13,7 +14,7 @@ export interface IDrawer {
   drawAll: () => void;
 }
 
-type Coordinates = {
+export type Coordinates = {
   x: number;
   y: number;
 };
@@ -47,6 +48,7 @@ export type Config = {
   defaultColor: string;
   defaultBorderColor: string;
   resizeHandleSize: number;
+  deleteZoneSize: number;
 };
 
 export type CreateNote = typeof createNote;
