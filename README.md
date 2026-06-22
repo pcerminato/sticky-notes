@@ -38,7 +38,7 @@ _Note selection_: by clicking over a note is it marked as selected (visually it 
 
 ## Demo
 
-> TODO: add demo video.
+https://github.com/user-attachments/assets/0c8ae071-0300-4bb2-a13c-566acda5811c
 
 ## Approach
 
@@ -65,7 +65,7 @@ _Note selection_: by clicking over a note is it marked as selected (visually it 
   - `note.ts`. It holds a single function to create a new note.
   - `utils/cursor.ts`. It holds utility functions to work with cursor/mouse events and pixels position calculations.
 
-## Run
+## Run locally
 
 - Use Node.js version _20.10.+_, _22.12.+_, _23_ or higher, because it is required for the vite version installed ([+ info](https://vite.dev/blog/announcing-vite8#node-js-support)) to support ESM (modules).
   - You can `nvm use` to use `v24.14.1` defined for these project in .nvmrc.
