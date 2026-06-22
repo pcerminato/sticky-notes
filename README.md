@@ -40,14 +40,11 @@ _Note selection_: by clicking over a note is it marked as selected (visually it 
 
 ### Main features
 
-<video width="640" height="360" controls>
-  <source src="https://github.com/user-attachments/assets/0c8ae071-0300-4bb2-a13c-566acda5811c" type="video/mp4">
-  Demo video of sticky notes features
-</video>
+[Demo video of sticky notes features](https://github.com/user-attachments/assets/0c8ae071-0300-4bb2-a13c-566acda5811c)
 
 ### Local storage
 
-> video here.
+[Demo video local storage persistence](https://github.com/user-attachments/assets/551faddd-b4f3-4721-9162-d8135c32f70a)
 
 ## Approach
 
