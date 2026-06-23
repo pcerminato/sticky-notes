@@ -65,8 +65,7 @@ export function createCanvasMouseDownHandler(
         });
 
         /* !!! Moves the note being resized to the front */
-        notesStore.notes.splice(i, 1);
-        notesStore.notes.push(note);
+        notesStore.bringToFront(note);
         noteClicked = true;
         break;
       }
@@ -88,8 +87,7 @@ export function createCanvasMouseDownHandler(
         });
 
         /* !!! To have the selected note up front, puts it at the end of the list, so it is rendered last */
-        notesStore.notes.splice(i, 1);
-        notesStore.notes.push(note);
+        notesStore.bringToFront(note);
         noteClicked = true;
         break;
       }

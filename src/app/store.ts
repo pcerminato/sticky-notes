@@ -17,7 +17,7 @@ The store manages the global state.
   Also helps config overrides and testing).
 */
 export function createStore(initialNotes?: Note[]): IStore {
-  let notes = initialNotes || [];
+  let _notes = initialNotes || [];
   let _state: State = {
     action: { type: "none" },
   };
@@ -31,29 +31,34 @@ export function createStore(initialNotes?: Note[]): IStore {
   };
 
   function addNote(note: Note) {
-    notes.push(note);
+    _notes = [..._notes, note];
   }
 
   function deleteNote(note: Note) {
-    const i = notes.indexOf(note);
-    if (i > -1) {
-      notes.splice(i, 1);
-    }
+    _notes = _notes.filter((n) => n !== note);
   }
 
   function saveState(newState: State) {
     _state = newState;
   }
 
+  function bringToFront(note: Note) {
+    const remaining = _notes.filter((n) => n !== note);
+    _notes = [...remaining, note];
+  }
+
   return Object.freeze({
     addNote,
     deleteNote,
     saveState,
-    notes,
+    bringToFront,
     config,
     /* using a getter to prevent direct mutations of the state (only allowed through saveState()) */
     get state() {
       return _state;
+    },
+    get notes() {
+      return _notes;
     },
   });
 }

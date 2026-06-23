@@ -3,6 +3,7 @@ import { createNote } from "./app/note";
 export interface IStore {
   addNote: (note: Note) => void;
   deleteNote: (note: Note) => void;
+  bringToFront: (note: Note) => void;
   notes: Note[];
   state: State;
   saveState: (state: State) => void;
