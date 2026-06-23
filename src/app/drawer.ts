@@ -8,6 +8,7 @@ export function createDrawer(
   canvas: HTMLCanvasElement,
 ): IDrawer {
   const context = canvas.getContext("2d");
+  let renderPending = false;
 
   function draw(note: Note) {
     if (context) {
@@ -44,6 +45,17 @@ export function createDrawer(
     drawDeleteZone();
   }
 
+  /* Optimizes rendering by avoiding redundant paints  */
+  function requestDraw() {
+    if (renderPending) return; // Skip if a frame layout pass is already queued
+    renderPending = true;
+
+    requestAnimationFrame(() => {
+      drawAll();
+      renderPending = false; // Reset the flag once the screen finishes rendering
+    });
+  }
+
   /* Helper function to draw the zone over the note to enable resize functionality */
   function drawResizeHandle(note: Note) {
     if (context) {
@@ -76,6 +88,6 @@ export function createDrawer(
 
   return Object.freeze({
     draw,
-    drawAll,
+    drawAll: requestDraw,
   });
 }
