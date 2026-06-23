@@ -6,6 +6,16 @@ import {
   isOverDeleteZone,
 } from "./utils/cursor";
 
+/* 
+  Cache placeholder reference for the canvas bounds to avoid calling getBoundingClientRect() on every mousemove,
+  because that would create multiple roundtrips of DOM reads. 
+*/
+let cachedCanvasBounds: DOMRect | null = null;
+
+export function updateCanvasBoundsCache(canvas: HTMLCanvasElement) {
+  cachedCanvasBounds = canvas.getBoundingClientRect();
+}
+
 export function createCanvas() {
   const canvas = document.createElement("canvas");
   canvas.setAttribute("id", "sticky-notes");
@@ -31,7 +41,11 @@ export function createCanvasMouseDownHandler(
   createNote: CreateNote,
 ) {
   return function canvasMouseDownHandler(e: MouseEvent) {
-    const cursor = getClickCoordinates(canvas, e);
+    updateCanvasBoundsCache(canvas);
+
+    if (!cachedCanvasBounds) return;
+
+    const cursor = getClickCoordinates(canvas, e, cachedCanvasBounds);
     let noteClicked = false;
 
     /* 
@@ -143,7 +157,11 @@ export function createCanvasMouseMoveHandler(
       return;
     }
 
-    const cursor = getClickCoordinates(canvas, e);
+    if (!cachedCanvasBounds) {
+      updateCanvasBoundsCache(canvas);
+    }
+
+    const cursor = getClickCoordinates(canvas, e, cachedCanvasBounds!);
 
     if (action.type === "resizing") {
       const { note, startWidth, startHeight, initCursor } = action;

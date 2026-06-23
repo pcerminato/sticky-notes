@@ -6,15 +6,17 @@ and pixels position calculations.
 */
 
 /* Returns the coordinates x and y where the cursor clicks relative to the canvas */
-export function getClickCoordinates(canvas: HTMLCanvasElement, e: MouseEvent) {
-  const canvasViewportInfo = canvas.getBoundingClientRect();
+export function getClickCoordinates(
+  canvas: HTMLCanvasElement,
+  e: MouseEvent,
+  cachedBounds: DOMRect,
+) {
   const { clientX, clientY } = e;
-  const { left, top, width, height } = canvasViewportInfo;
+  const { left, top, width, height } = cachedBounds;
   // calc mouse position relative to the canvas element
   const canvasX = clientX - left;
   const canvasY = clientY - top;
-
-  // map coords to the internal pixel dimention
+  // map coords to the internal pixel dimetion
   const x = canvasX * (canvas.width / width);
   const y = canvasY * (canvas.height / height);
 
